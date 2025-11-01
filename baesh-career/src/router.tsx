@@ -44,7 +44,7 @@ export function RouterProvider() {
 
 export function Nav() {
   const items = [
-    { to: '/hub', label: '클론 허브' },
+    { to: '/hub', label: '클론' },
     { to: '/profile', label: '프로필' },
     { to: '/lounge', label: '라운지' },
     { to: '/networking', label: '네트워킹' },
