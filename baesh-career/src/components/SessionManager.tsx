@@ -110,18 +110,31 @@ export default function SessionManager({ sessions, currentSessionId, onSelectSes
                     </div>
                   </div>
                   <button
-                    className="badge"
+                    className="badge delete-session-btn"
                     onClick={(e) => {
                       e.stopPropagation()
                       if (confirm(`"${session.title}" 세션을 삭제하시겠습니까?`)) {
                         onDeleteSession(session.id)
+                        // 삭제 후 즉시 UI 업데이트를 위해 약간의 지연
+                        setTimeout(() => {
+                          // 모달은 열린 상태로 유지하여 삭제 결과 확인 가능
+                        }, 100)
                       }
                     }}
                     style={{ 
                       fontSize: 11,
                       padding: '4px 8px',
                       flexShrink: 0,
-                      color: '#EF4444'
+                      color: '#EF4444',
+                      transition: 'all 0.2s ease'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.background = 'rgba(239, 68, 68, 0.1)'
+                      e.currentTarget.style.transform = 'scale(1.1)'
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.background = ''
+                      e.currentTarget.style.transform = 'scale(1)'
                     }}
                   >
                     🗑️

@@ -363,11 +363,26 @@ ${profileContext}`,
   };
 
   const handleDeleteSession = (sessionId: string) => {
+    console.log("삭제 시도:", sessionId);
     deleteSession(sessionId);
-    setSessions(getAllSessions());
+    const updatedSessions = getAllSessions();
+    console.log("삭제 후 세션 목록:", updatedSessions);
+    setSessions(updatedSessions);
 
+    // 현재 보고 있는 세션을 삭제한 경우
     if (currentSessionId === sessionId) {
-      handleNewSession();
+      if (updatedSessions.length > 0) {
+        // 다른 세션이 있으면 첫 번째 세션으로 이동
+        const firstSession = updatedSessions[0];
+        setCurrentSessionId(firstSession.id);
+        setCurrentSessionIdState(firstSession.id);
+        setMsgs(
+          firstSession.messages.map((m) => ({ role: m.role, text: m.text }))
+        );
+      } else {
+        // 세션이 없으면 새 세션 생성
+        handleNewSession();
+      }
     }
   };
 
