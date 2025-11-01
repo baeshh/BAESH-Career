@@ -60,72 +60,129 @@ export const getUserProfile = (): UserProfile => {
       nickname: '승환',
       school: '경일대학교',
       major: '클라우드컴퓨팅전공',
-      status: ['학생', '창업가', '수상 다수']
+      status: ['🎓 학생', '💼 창업가', '🏆 수상 다수', '🎖️ 해병대 전역']
     },
     credentials: [
+      // 자격증
       { name: '정보처리기사', issuer: '한국산업인력공단', verified: true },
-      { name: 'SQLD', issuer: '직접 등록', verified: false },
-      { name: '인공지능 고급과정 수료', issuer: '포항TP', verified: true }
+      { name: 'SQLD', issuer: '한국데이터산업진흥원', verified: true },
+      { name: '빅데이터분석전문가', issuer: '한국데이터산업진흥원', verified: true },
+      { name: '백준 티어 - 골드', issuer: 'Baekjoon Online Judge', verified: true },
+      { name: '토익 800점', issuer: 'ETS', verified: true },
+      // 포항테크노파크 수료증
+      { name: '인공지능 기본과정 수료', issuer: '포항테크노파크', verified: true },
+      { name: '인공지능 중급과정 수료', issuer: '포항테크노파크', verified: true },
+      { name: '인공지능 고급과정 우수 수료', issuer: '포항테크노파크', verified: true },
+      { name: '제조업 AI 기본과정 수료', issuer: '포항테크노파크', verified: true },
+      { name: '블록체인 기본과정 수료', issuer: '포항테크노파크', verified: true },
+      { name: '데이터 중급과정 수료', issuer: '포항테크노파크', verified: true },
+      // 기타 수료증
+      { name: '정보보안기초 수료', issuer: '경북정보보호지원센터', verified: true },
+      { name: '포스코 창업 인큐베이팅스쿨', issuer: '포스코인재창조원', verified: true },
+      { name: '하나소셜벤처유니버시티', issuer: '하나금융원', verified: true },
+      { name: '혁신창업스쿨 온라인 공통 IT/서비스, 특화 교육 수료', issuer: '중소벤처기업부', verified: true },
+      { name: 'Sport start-up 수료 및 우수수료자 30인 선정', issuer: '문화체육관광부', verified: true }
     ],
     awards: [
-      { name: 'SW 아카데미 1위', organization: '경일대학교', year: '2024' },
-      { name: 'Meta Llama Hackathon 1위', organization: 'Meta', year: '2024' }
+      // 경진대회 수상
+      { name: 'CES 혁신상 (Airet.io)', organization: 'CES (Consumer Electronics Show)', year: '2025' },
+      { name: 'Meta Llama LLM 응용 해커톤 1위', organization: 'Meta', year: '2024' },
+      { name: 'SW 아카데미 5기 풀스택 개발자 양성 프로젝트 경진대회 - 포항테크노파크 원장상', organization: '포항테크노파크', year: '2024' },
+      { name: 'G-star 경일대학교 예선 1위 (대상 경일대학교 총장상)', organization: '경일대학교', year: '2024' },
+      { name: 'G-star 대학생 창업경진대회 예선 우수 입상', organization: 'G-star', year: '2024' },
+      { name: 'DGU IR CONTEST 3위', organization: '동국대학교', year: '2024' },
+      { name: 'Global innovation Award', organization: '제주창조경제혁신센터', year: '2024' },
+      { name: 'Start-up Vision Award', organization: '부산경제진흥원', year: '2024' },
+      { name: 'venture Entrepreneur Award', organization: '부산창조경제혁신센터', year: '2024' },
+      { name: '대구 경북 ICT COG 창업경진대회 최우수 (1위)', organization: '대구경북과학기술원', year: '2024' },
+      { name: '경일대학교 교내 창업경진대회 최우수 (1위)', organization: '경일대학교', year: '2024' },
+      { name: '경일대학교 Kollabo 경진대회 우수 (2위)', organization: '경일대학교', year: '2024' },
+      { name: '경일대학교 LED 캡스톤 디자인 프로젝트 경진대회 최우수 (1위)', organization: '경일대학교', year: '2024' },
+      { name: '경일대학교 사제동행 논문 활동 우수상 (2위)', organization: '경일대학교', year: '2024' },
+      // 해병대 표창
+      { name: '해병대 전군대표 모범 해병 사령관 표창', organization: '해병대사령부', year: '2022' }
     ],
     careers: [
-      { company: 'AIRET', role: '백엔드 엔지니어', period: '2025~현재', verified: true },
-      { company: '굿네이버스', role: '장학생', period: '2023~2024', verified: false },
-      { company: '해병대', role: '표창', period: '2021~2023', verified: true }
+      { company: 'Airet.io', role: '백엔드 엔지니어 (사이트 개발)', period: '2025.07 ~ 현재', verified: true },
+      { company: '굿네이버스 인터내셔널', role: '근로장학생', period: '2025.03 ~ 2025.08', verified: true },
+      { company: '해병대', role: '병장 만기전역 (전군대표 모범 해병 표창)', period: '2021.05 ~ 2022.11', verified: true }
     ],
     portfolios: [
       {
         name: 'BAESH (AI 클론 커리어 플랫폼)',
-        role: '대표 / 프론트엔드 & 전략기획',
-        techStack: 'React, Node.js, LangGraph, GPT API',
-        period: '2024.06~현재',
-        achievements: 'SW Specialist Project 1위 / 포항TP 투자 유치',
+        role: '대표 / 풀스택 개발 & 전략기획',
+        techStack: 'React, TypeScript, Node.js, OpenAI API, Upstage Solar Pro2',
+        period: '2024.06 ~ 현재',
+        achievements: 'SW 아카데미 경진대회 1위 / 포항TP 원장상 / 대한전자공학회 논문 등록 / Meta Llama 해커톤 1위 / 다수 창업경진대회 수상',
         verified: true
       },
       {
-        name: '운동판 (운동 매칭 플랫폼)',
+        name: '운동판 (IoT 기반 체육시설 자동화 플랫폼)',
         role: '대표 / 풀스택 개발',
-        techStack: 'React Native, Firebase',
-        period: '2024.01~2024.05',
-        achievements: '구공패밀리 매출 1,400만원 달성',
+        techStack: 'React Native, Firebase, IoT',
+        period: '2024.01 ~ 2024.05',
+        achievements: '포항연합기술지주 아이디어 사업화 지원 선정 / Sport start-up 우수수료자 30인 선정',
         verified: true
       },
       {
-        name: 'BILLBOOST (청구 자동화)',
-        role: '개발자',
-        techStack: 'Python, Django',
-        period: '2023.09~2023.12',
-        achievements: '자동화 시스템 구축',
-        verified: false
+        name: '구공패밀리 (빈티지 악세사리 리셀 플랫폼)',
+        role: '대표 / 운영 총괄',
+        techStack: 'E-commerce, SNS Marketing',
+        period: '2024.01 ~ 현재',
+        achievements: '2024년 매출 1,000만원 / 2025년 7월 기준 매출 1,400만원 달성',
+        verified: true
+      },
+      {
+        name: 'BILLBOOST (자기계발 동기부여 컨텐츠 채널)',
+        role: '크리에이터 / 운영자',
+        techStack: 'YouTube, Content Creation',
+        period: '2023.09 ~ 현재',
+        achievements: '조회수 20만, 10만 등 보유 / 구독자 지속 증가',
+        verified: true
+      },
+      {
+        name: 'Airet.io (CES 혁신상 수상 프로젝트)',
+        role: '백엔드 엔지니어',
+        techStack: 'Node.js, Python, AI/ML',
+        period: '2025.07 ~ 현재',
+        achievements: 'CES 혁신상 수상 / CES 참가 기업 선정',
+        verified: true
       }
     ],
     organizations: [
-      { name: '무역사관학교', verified: true },
-      { name: '글로벌 리더단', verified: false },
-      { name: '청년무역인연합', verified: true }
+      { name: '대학기업 협력형 SW 아카데미 풀스택 개발자 양성 교육 5기', verified: true },
+      { name: '한국무역협회 청년 무역사관학교 13기', verified: true },
+      { name: '경북청년무역인연합 연합원', verified: true },
+      { name: '대구광역시 4차산업혁명 청년체험단 7기 (엠버서더)', verified: true },
+      { name: '2024 중국 글로벌 진출 시장 조사단 1기', verified: true },
+      { name: '청년글로벌리더 육성 1기', verified: true },
+      { name: '대한전자공학회 (논문 등록)', verified: true }
     ],
     skills: {
-      development: 82,
-      design: 46,
-      communication: 87
+      development: 88, // 풀스택 개발 + 백엔드 엔지니어 경력
+      design: 52, // 컨텐츠 제작 경험
+      communication: 92 // 창업가 + 다수 경진대회 + 글로벌 활동 + 해병대 표창
     },
-    interests: ['AI', '데이터', '창업', '협업', '글로벌'],
-    goals: '6개월 내 AI 기반 스타트업 성장 및 데이터 엔지니어링 역량 강화',
+    interests: ['AI', '데이터', '창업', '협업', '글로벌', '블록체인', 'IoT', '풀스택 개발'],
+    goals: 'AI 기반 스타트업 성장 및 글로벌 진출 / 데이터 엔지니어링 역량 강화 / CES 혁신상 수상 기업으로서 지속 성장',
     recentPosts: [
       {
-        title: 'AI 기반 커리어 플랫폼 BAESH 개발기',
-        content: '오늘 포항TP 인증 수료 완료했습니다. 새로운 프로젝트 준비 중! AI와 데이터를 활용한 창업에 관심 있는 분들과 네트워킹하고 싶습니다.',
-        tags: ['AI', '창업', '데이터'],
-        timestamp: '2시간 전'
+        title: 'CES 혁신상 수상! Airet.io 백엔드 개발 참여',
+        content: 'CES에서 혁신상을 받은 Airet.io 프로젝트에 백엔드 엔지니어로 참여하고 있습니다. AI 기술을 활용한 혁신적인 서비스를 개발 중입니다. 글로벌 시장 진출을 위한 기술 스택 고도화에 집중하고 있습니다.',
+        tags: ['CES', 'AI', '백엔드', '글로벌'],
+        timestamp: '1일 전'
       },
       {
-        title: 'SW Specialist Project 1위 수상',
-        content: '팀원들과 함께 노력한 결과 좋은 성과를 얻었습니다. AI 클론 기반 커리어 플랫폼이 인정받아 기쁩니다.',
-        tags: ['수상', 'AI', '프로젝트'],
-        timestamp: '1일 전'
+        title: 'Meta Llama LLM 해커톤 1위 수상!',
+        content: 'Meta에서 주최한 Llama LLM 응용 해커톤에서 1위를 수상했습니다! AI 클론 기반 커리어 플랫폼 BAESH의 기술력을 인정받아 기쁩니다. LLM을 활용한 실시간 커리어 코칭 시스템이 높은 평가를 받았습니다.',
+        tags: ['Meta', 'LLM', 'AI', '수상'],
+        timestamp: '3일 전'
+      },
+      {
+        title: '구공패밀리 매출 1,400만원 돌파!',
+        content: '빈티지 악세사리 리셀 플랫폼 구공패밀리가 2025년 7월 기준 1,400만원 매출을 달성했습니다. 작년 1,000만원에서 40% 성장! E-commerce와 창업에 관심 있는 분들과 경험을 나누고 싶습니다.',
+        tags: ['창업', 'E-commerce', '매출'],
+        timestamp: '1주일 전'
       }
     ]
   }

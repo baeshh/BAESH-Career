@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import ProgressRing from '../components/ProgressRing'
 import InsightCard from '../components/InsightCard'
 import Modal from '../components/Modal'
@@ -9,10 +9,13 @@ import CareerFormModal from '../forms/CareerFormModal'
 import PortfolioFormModal from '../forms/PortfolioFormModal'
 import OrganizationFormModal from '../forms/OrganizationFormModal'
 import VerificationModal from '../forms/VerificationModal'
+import { getUserProfile } from '../services/userProfileService'
 
 type Tab = '자격/수료' | '수상/성과' | '경력' | '포트폴리오' | '단체/활동'
 
 export default function Profile() {
+  const userProfile = useMemo(() => getUserProfile(), [])
+  
   const [tab, setTab] = useState<Tab>('자격/수료')
   const [editOpen, setEditOpen] = useState(false)
   const [newInsight, setNewInsight] = useState(false)
@@ -39,21 +42,25 @@ export default function Profile() {
           <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
             <div style={{ width: 64, height: 64, borderRadius: 999, background: 'linear-gradient(135deg, #1E6FFF, #408CFF)' }} />
             <div>
-              <h2 style={{ margin: 0 }}>배승환 <span style={{ fontSize: 16 }}>🇰🇷</span></h2>
-              <div style={{ color: 'var(--muted)' }}>“AI와 데이터를 통해 세상을 바꾸는 창업형 개발자”</div>
-              <div className="helper">@baeseunghwan8276 · 경일대학교 클라우드컴퓨팅전공 (2020.03~현재)</div>
+              <h2 style={{ margin: 0 }}>{userProfile.basic.name} <span style={{ fontSize: 16 }}>🇰🇷</span></h2>
+              <div style={{ color: 'var(--muted)' }}>"AI와 데이터를 통해 세상을 바꾸는 창업형 개발자"</div>
+              <div className="helper">@baeseunghwan8276 · {userProfile.basic.school} {userProfile.basic.major} (2020.03~현재)</div>
             </div>
             <div style={{ marginLeft: 'auto', display: 'flex', gap: 8 }}>
               <button className="badge" onClick={() => setProfileEditOpen(true)}>✏ 프로필 수정</button>
               <span className="badge">🔗 Verified</span>
             </div>
           </div>
-          <div style={{ display: 'flex', gap: 8, marginTop: 10 }}>
-            <span className="chip">🎓 학생</span>
-            <span className="chip">💼 창업가</span>
-            <span className="chip">🏆 수상 다수</span>
+          <div style={{ display: 'flex', gap: 8, marginTop: 10, flexWrap: 'wrap' }}>
+            {userProfile.basic.status.map((s, i) => (
+              <span key={i} className="chip">{s}</span>
+            ))}
           </div>
-          <div className="helper" style={{ marginTop: 8 }}>올해 인증 활동 12건, Verified 비율 78%, 평균 성장률 +16%</div>
+          <div className="helper" style={{ marginTop: 8 }}>
+            올해 인증 활동 {userProfile.credentials.filter(c => c.verified).length}건, 
+            Verified 비율 {Math.round((userProfile.credentials.filter(c => c.verified).length / userProfile.credentials.length) * 100)}%, 
+            평균 성장률 +{Math.round((userProfile.skills.development + userProfile.skills.communication) / 2 - 70)}%
+          </div>
         </div>
 
         {/* Tabs */}
@@ -68,11 +75,20 @@ export default function Profile() {
               <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 8, marginBottom: 8 }}>
                 <button className="badge" onClick={()=>setOpenCred(true)}>+ 새 자격/수료</button>
               </div>
-              <ul>
-                <li>정보처리기사 <span className="verify verify--ok">✅ Verified (한국산업인력공단)</span></li>
-                <li>SQLD <span className="verify verify--pending">🔘 비인증 (직접 등록)</span> <button className="badge" onClick={()=>setOpenVerify(true)}>인증 요청</button></li>
-                <li className="verify--locked" title="기관 미가입">하나소셜벤처유니버시티 수료(하나금융원) 🔒 인증 대기 중 <button className="badge" onClick={()=>setOpenVerify(true)}>기관 등록/인증 요청</button></li>
-                <li>인공지능 고급과정 수료(포항TP) <span className="verify verify--ok">✅ Verified</span></li>
+              <ul style={{ maxHeight: '60vh', overflowY: 'auto' }}>
+                {userProfile.credentials.map((cred, i) => (
+                  <li key={i}>
+                    {cred.name} 
+                    {cred.verified ? (
+                      <span className="verify verify--ok">✅ Verified ({cred.issuer})</span>
+                    ) : (
+                      <>
+                        <span className="verify verify--pending">🔘 비인증 ({cred.issuer})</span>
+                        <button className="badge" onClick={()=>setOpenVerify(true)}>인증 요청</button>
+                      </>
+                    )}
+                  </li>
+                ))}
               </ul>
             </div>
           )}
@@ -81,9 +97,13 @@ export default function Profile() {
               <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 8, marginBottom: 8 }}>
                 <button className="badge" onClick={()=>setOpenAward(true)}>+ 수상/성과 추가</button>
               </div>
-              <ul>
-                <li>SW 아카데미 1위 <span className="verify verify--ok">✅ Verified</span></li>
-                <li>Meta Llama Hackathon 1위 <span className="verify verify--ok">✅ Verified</span></li>
+              <ul style={{ maxHeight: '60vh', overflowY: 'auto' }}>
+                {userProfile.awards.map((award, i) => (
+                  <li key={i}>
+                    <strong>{award.name}</strong> ({award.organization}, {award.year})
+                    <span className="verify verify--ok">✅ Verified</span>
+                  </li>
+                ))}
               </ul>
             </div>
           )}
@@ -92,31 +112,45 @@ export default function Profile() {
               <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 8, marginBottom: 8 }}>
                 <button className="badge" onClick={()=>setOpenCareer(true)}>+ 경력 추가</button>
               </div>
-              <ul>
-                <li>AIRET 백엔드 엔지니어 (2025~) <span className="verify verify--ok">✅ Verified</span></li>
-                <li>굿네이버스 장학생 <span className="verify verify--pending">🔘 비인증</span> <button className="badge" onClick={()=>setOpenVerify(true)}>인증 요청</button></li>
-                <li>해병대 표창 <span className="verify verify--ok">✅ Verified</span></li>
+              <ul style={{ maxHeight: '60vh', overflowY: 'auto' }}>
+                {userProfile.careers.map((career, i) => (
+                  <li key={i}>
+                    <strong>{career.company}</strong> - {career.role} ({career.period})
+                    {career.verified ? (
+                      <span className="verify verify--ok">✅ Verified</span>
+                    ) : (
+                      <>
+                        <span className="verify verify--pending">🔘 비인증</span>
+                        <button className="badge" onClick={()=>setOpenVerify(true)}>인증 요청</button>
+                      </>
+                    )}
+                  </li>
+                ))}
               </ul>
             </div>
           )}
           {tab === '포트폴리오' && (
-            <div className="panel" style={{ padding: 12 }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <strong>BAESH (AI 클론 커리어 플랫폼)</strong>
-                <div style={{ display: 'flex', gap: 6 }}>
-                  <button className="badge" onClick={() => setEditOpen(true)}>✏ 수정</button>
-                  <span className="badge">🔗 Verified</span>
+            <div style={{ maxHeight: '60vh', overflowY: 'auto' }}>
+              {userProfile.portfolios.map((port, i) => (
+                <div key={i} className="panel" style={{ padding: 12, marginBottom: 12 }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <strong>{port.name}</strong>
+                    <div style={{ display: 'flex', gap: 6 }}>
+                      <button className="badge" onClick={() => setEditOpen(true)}>✏ 수정</button>
+                      {port.verified && <span className="badge">🔗 Verified</span>}
+                    </div>
+                  </div>
+                  <div className="helper">역할: {port.role} · 스택: {port.techStack} · 기간: {port.period}</div>
+                  <div className="helper">성과: {port.achievements}</div>
+                  <div className="panel" style={{ padding: 10, marginTop: 8, background: '#F7F9FB' }}>
+                    <strong>🤖 클론 인사이트</strong>
+                    <ul style={{ marginTop: 6 }}>
+                      <li>이 프로젝트를 통해 'AI 플랫폼 아키텍처 설계' 역량 +12% 성장</li>
+                      <li>다수의 협업 기록이 등록되었습니다</li>
+                    </ul>
+                  </div>
                 </div>
-              </div>
-              <div className="helper">역할: 대표 / 프론트엔드 & 전략기획 · 스택: React, Node.js, LangGraph, GPT API · 기간: 2024.06~현재</div>
-              <div className="helper">성과: SW Specialist Project 1위 / 포항TP 투자 유치</div>
-              <div className="panel" style={{ padding: 10, marginTop: 8 }}>
-                <strong>클론 인사이트</strong>
-                <ul>
-                  <li>이 프로젝트를 통해 ‘AI 플랫폼 아키텍처 설계’ 역량 +12% 성장</li>
-                  <li>3개의 협업 기록이 등록되었습니다 (팀원: ○○, ○○)</li>
-                </ul>
-              </div>
+              ))}
               <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 8, marginTop: 8 }}>
                 <button className="badge" onClick={()=>setOpenPort(true)}>+ 프로젝트 추가</button>
               </div>
@@ -127,10 +161,20 @@ export default function Profile() {
               <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 8, marginBottom: 8 }}>
                 <button className="badge" onClick={()=>setOpenOrg(true)}>+ 단체/활동 추가</button>
               </div>
-              <ul>
-                <li>무역사관학교 <span className="verify verify--ok">✅ Verified</span></li>
-                <li>글로벌 리더단 <span className="verify verify--pending">🔘 비인증</span> <button className="badge" onClick={()=>setOpenVerify(true)}>인증 요청</button></li>
-                <li>청년무역인연합 <span className="verify verify--ok">✅ Verified</span></li>
+              <ul style={{ maxHeight: '60vh', overflowY: 'auto' }}>
+                {userProfile.organizations.map((org, i) => (
+                  <li key={i}>
+                    {org.name} 
+                    {org.verified ? (
+                      <span className="verify verify--ok">✅ Verified</span>
+                    ) : (
+                      <>
+                        <span className="verify verify--pending">🔘 비인증</span>
+                        <button className="badge" onClick={()=>setOpenVerify(true)}>인증 요청</button>
+                      </>
+                    )}
+                  </li>
+                ))}
               </ul>
             </div>
           )}
@@ -157,9 +201,9 @@ export default function Profile() {
         <div className="panel" style={{ padding: 12, marginTop: 8 }}>
           <strong>실시간 스킬 인사이트</strong>
           <div className="rings" style={{ marginTop: 8 }}>
-            <ProgressRing percent={82} label="AI 개발역량" />
-            <ProgressRing percent={78} label="데이터분석" color="#3B82F6" />
-            <ProgressRing percent={87} label="커뮤니케이션/리더십" color="#10B981" />
+            <ProgressRing percent={userProfile.skills.development} label="개발 역량" />
+            <ProgressRing percent={userProfile.skills.design} label="디자인 역량" color="#3B82F6" />
+            <ProgressRing percent={userProfile.skills.communication} label="커뮤니케이션/리더십" color="#10B981" />
           </div>
         </div>
         <div className="insight-grid" style={{ marginTop: 8 }}>
