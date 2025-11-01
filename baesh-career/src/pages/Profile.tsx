@@ -2,6 +2,13 @@ import { useState } from 'react'
 import ProgressRing from '../components/ProgressRing'
 import InsightCard from '../components/InsightCard'
 import Modal from '../components/Modal'
+import ProfileEditModal from '../forms/ProfileEditModal'
+import CredentialFormModal from '../forms/CredentialFormModal'
+import AwardFormModal from '../forms/AwardFormModal'
+import CareerFormModal from '../forms/CareerFormModal'
+import PortfolioFormModal from '../forms/PortfolioFormModal'
+import OrganizationFormModal from '../forms/OrganizationFormModal'
+import VerificationModal from '../forms/VerificationModal'
 
 type Tab = '자격/수료' | '수상/성과' | '경력' | '포트폴리오' | '단체/활동'
 
@@ -9,6 +16,13 @@ export default function Profile() {
   const [tab, setTab] = useState<Tab>('자격/수료')
   const [editOpen, setEditOpen] = useState(false)
   const [newInsight, setNewInsight] = useState(false)
+  const [profileEditOpen, setProfileEditOpen] = useState(false)
+  const [openCred, setOpenCred] = useState(false)
+  const [openAward, setOpenAward] = useState(false)
+  const [openCareer, setOpenCareer] = useState(false)
+  const [openPort, setOpenPort] = useState(false)
+  const [openOrg, setOpenOrg] = useState(false)
+  const [openVerify, setOpenVerify] = useState(false)
 
   const addInsight = (title: string) => {
     setNewInsight(true)
@@ -30,7 +44,7 @@ export default function Profile() {
               <div className="helper">@baeseunghwan8276 · 경일대학교 클라우드컴퓨팅전공 (2020.03~현재)</div>
             </div>
             <div style={{ marginLeft: 'auto', display: 'flex', gap: 8 }}>
-              <button className="badge" onClick={() => setEditOpen(true)}>✏ 수정</button>
+              <button className="badge" onClick={() => setProfileEditOpen(true)}>✏ 프로필 수정</button>
               <span className="badge">🔗 Verified</span>
             </div>
           </div>
@@ -50,25 +64,40 @@ export default function Profile() {
         </div>
         <div className="panel" style={{ padding: 12 }}>
           {tab === '자격/수료' && (
-            <ul>
-              <li>정보처리기사 <span className="verify verify--ok">✅ Verified (한국산업인력공단)</span></li>
-              <li>SQLD <span className="verify verify--pending">🔘 비인증 (직접 등록)</span></li>
-              <li className="verify--locked" title="기관 미가입">하나소셜벤처유니버시티 수료(하나금융원) 🔒 인증 대기 중</li>
-              <li>인공지능 고급과정 수료(포항TP) <span className="verify verify--ok">✅ Verified</span></li>
-            </ul>
+            <div>
+              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 8, marginBottom: 8 }}>
+                <button className="badge" onClick={()=>setOpenCred(true)}>+ 새 자격/수료</button>
+              </div>
+              <ul>
+                <li>정보처리기사 <span className="verify verify--ok">✅ Verified (한국산업인력공단)</span></li>
+                <li>SQLD <span className="verify verify--pending">🔘 비인증 (직접 등록)</span> <button className="badge" onClick={()=>setOpenVerify(true)}>인증 요청</button></li>
+                <li className="verify--locked" title="기관 미가입">하나소셜벤처유니버시티 수료(하나금융원) 🔒 인증 대기 중 <button className="badge" onClick={()=>setOpenVerify(true)}>기관 등록/인증 요청</button></li>
+                <li>인공지능 고급과정 수료(포항TP) <span className="verify verify--ok">✅ Verified</span></li>
+              </ul>
+            </div>
           )}
           {tab === '수상/성과' && (
-            <ul>
-              <li>SW 아카데미 1위 <span className="verify verify--ok">✅ Verified</span></li>
-              <li>Meta Llama Hackathon 1위 <span className="verify verify--ok">✅ Verified</span></li>
-            </ul>
+            <div>
+              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 8, marginBottom: 8 }}>
+                <button className="badge" onClick={()=>setOpenAward(true)}>+ 수상/성과 추가</button>
+              </div>
+              <ul>
+                <li>SW 아카데미 1위 <span className="verify verify--ok">✅ Verified</span></li>
+                <li>Meta Llama Hackathon 1위 <span className="verify verify--ok">✅ Verified</span></li>
+              </ul>
+            </div>
           )}
           {tab === '경력' && (
-            <ul>
-              <li>AIRET 백엔드 엔지니어 (2025~) <span className="verify verify--ok">✅ Verified</span></li>
-              <li>굿네이버스 장학생 <span className="verify verify--pending">🔘 비인증</span></li>
-              <li>해병대 표창 <span className="verify verify--ok">✅ Verified</span></li>
-            </ul>
+            <div>
+              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 8, marginBottom: 8 }}>
+                <button className="badge" onClick={()=>setOpenCareer(true)}>+ 경력 추가</button>
+              </div>
+              <ul>
+                <li>AIRET 백엔드 엔지니어 (2025~) <span className="verify verify--ok">✅ Verified</span></li>
+                <li>굿네이버스 장학생 <span className="verify verify--pending">🔘 비인증</span> <button className="badge" onClick={()=>setOpenVerify(true)}>인증 요청</button></li>
+                <li>해병대 표창 <span className="verify verify--ok">✅ Verified</span></li>
+              </ul>
+            </div>
           )}
           {tab === '포트폴리오' && (
             <div className="panel" style={{ padding: 12 }}>
@@ -88,14 +117,22 @@ export default function Profile() {
                   <li>3개의 협업 기록이 등록되었습니다 (팀원: ○○, ○○)</li>
                 </ul>
               </div>
+              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 8, marginTop: 8 }}>
+                <button className="badge" onClick={()=>setOpenPort(true)}>+ 프로젝트 추가</button>
+              </div>
             </div>
           )}
           {tab === '단체/활동' && (
-            <ul>
-              <li>무역사관학교 <span className="verify verify--ok">✅ Verified</span></li>
-              <li>글로벌 리더단 <span className="verify verify--pending">🔘 비인증</span></li>
-              <li>청년무역인연합 <span className="verify verify--ok">✅ Verified</span></li>
-            </ul>
+            <div>
+              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 8, marginBottom: 8 }}>
+                <button className="badge" onClick={()=>setOpenOrg(true)}>+ 단체/활동 추가</button>
+              </div>
+              <ul>
+                <li>무역사관학교 <span className="verify verify--ok">✅ Verified</span></li>
+                <li>글로벌 리더단 <span className="verify verify--pending">🔘 비인증</span> <button className="badge" onClick={()=>setOpenVerify(true)}>인증 요청</button></li>
+                <li>청년무역인연합 <span className="verify verify--ok">✅ Verified</span></li>
+              </ul>
+            </div>
           )}
         </div>
 
@@ -130,11 +167,17 @@ export default function Profile() {
           <InsightCard title="Meta Llama Hackathon 우승 반영" description="AI R&D 역량 +20%가 반영되었습니다" />
           <div className="panel" style={{ padding: 12 }}>
             <strong>성장 타임라인</strong>
-            <div className="timeline" style={{ marginTop: 8 }}>
+            <div className="timeline2" style={{ marginTop: 8 }}>
               {[{d:'2025.03',t:'AIRET 백엔드 엔지니어 등록 (Verified)'},{d:'2025.02',t:'구공패밀리 매출 1,400만 달성 (+비즈니스 역량 +10%)'},{d:'2024.12',t:'Meta Llama Hackathon 1위 (AI 기술 역량 +20%)'},{d:'2024.06',t:'운동판 플랫폼 런칭 (창업 역량 +15%)'},{d:'2023.11',t:'포항TP 인공지능 고급과정 수료 (학습 역량 +8%)'}].map((i,idx)=> (
-                <div key={idx} className="timeline-item">
-                  <div className="helper">[{i.d}]</div>
-                  <div>{i.t}</div>
+                <div key={idx} className="t-row">
+                  <div className="t-marker">
+                    <span className="t-dot" />
+                    <span className="t-line" />
+                  </div>
+                  <div>
+                    <div className="helper">[{i.d}]</div>
+                    <div>{i.t}</div>
+                  </div>
                 </div>
               ))}
             </div>
@@ -163,6 +206,15 @@ export default function Profile() {
           </div>
         </div>
       </Modal>
+
+      {/* Dedicated edit/verify forms */}
+      <ProfileEditModal open={profileEditOpen} onClose={()=>setProfileEditOpen(false)} onSave={(d)=>addInsight('프로필이 업데이트되었습니다')} />
+      <CredentialFormModal open={openCred} onClose={()=>setOpenCred(false)} onSave={(d)=>addInsight('새 자격/수료가 추가되었습니다')} />
+      <AwardFormModal open={openAward} onClose={()=>setOpenAward(false)} onSave={(d)=>addInsight('새 수상/성과가 추가되었습니다')} />
+      <CareerFormModal open={openCareer} onClose={()=>setOpenCareer(false)} onSave={(d)=>addInsight('새 경력이 추가되었습니다')} />
+      <PortfolioFormModal open={openPort} onClose={()=>setOpenPort(false)} onSave={(d)=>addInsight('새 프로젝트가 추가되었습니다')} />
+      <OrganizationFormModal open={openOrg} onClose={()=>setOpenOrg(false)} onSave={(d)=>addInsight('새 단체/활동이 추가되었습니다')} />
+      <VerificationModal open={openVerify} onClose={()=>setOpenVerify(false)} onSubmit={(d)=>addInsight('인증 요청이 접수되었습니다')} />
     </div>
   )
 }

@@ -112,6 +112,16 @@ a { color: inherit; text-decoration: none; }
 .social-row { display: flex; align-items: center; gap: 10px; height: 44px; border: 1px solid var(--border); border-radius: 12px; background: var(--panel); padding: 0 12px; cursor: pointer; transition: box-shadow .2s var(--ease), transform .2s var(--ease); }
 .social-row:hover { box-shadow: 0 8px 24px -12px rgba(30,111,255,0.45); transform: translateY(-1px); }
 
+/* Lounge */
+.verified-badge { background: linear-gradient(135deg, #1E6FFF, #408CFF); color: #fff; padding: 2px 6px; border-radius: 999px; font-size: 10px; white-space: nowrap; }
+.lounge-card { background: #F8FAFC; border: 1px solid var(--border); border-radius: 12px; padding: 10px; max-width: 100%; overflow: hidden; }
+.lounge-card:hover { box-shadow: 0 8px 24px -12px rgba(30,111,255,0.35); }
+.lounge-grid { display: grid; gap: 10px; grid-template-columns: 1fr; }
+@media (min-width: 700px) { .lounge-grid { grid-template-columns: 1fr 1fr; } }
+@media (min-width: 1100px) { .lounge-grid { grid-template-columns: 1fr 1fr 1fr; } }
+.carousel { display: grid; grid-auto-flow: column; gap: 10px; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 4px; }
+.carousel > * { scroll-snap-align: start; min-width: 260px; max-width: 320px; }
+
 /* Pills */
 .pill { display: inline-flex; align-items: center; height: 32px; padding: 0 12px; border-radius: 999px; background: rgba(30,111,255,0.1); color: var(--brand); border: 1px solid rgba(30,111,255,0.25); }
 
@@ -158,6 +168,14 @@ a { color: inherit; text-decoration: none; }
 .timeline-item { position: relative; margin: 12px 0; }
 .timeline-item::before { content: ""; position: absolute; left: 12px; top: 8px; width: 8px; height: 8px; border-radius: 999px; background: var(--brand); box-shadow: 0 0 0 2px #fff; }
 .timeline-item > div { margin-left: 8px; }
+
+/* Alternative timeline (no overlap, grid-based) */
+.timeline2 { position: relative; display: grid; gap: 14px; }
+.timeline2 .t-row { display: grid; grid-template-columns: 20px 1fr; column-gap: 10px; align-items: start; }
+.timeline2 .t-marker { position: relative; width: 20px; }
+.timeline2 .t-marker .t-dot { position: absolute; left: 6px; top: 6px; width: 8px; height: 8px; border-radius: 999px; background: var(--brand); box-shadow: 0 0 0 2px #fff; }
+.timeline2 .t-marker .t-line { position: absolute; left: 9px; top: 14px; bottom: -14px; width: 2px; background: var(--border); }
+.timeline2 .t-row:last-child .t-marker .t-line { bottom: 0; }
 
 /* Separator */
 .separator { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 12px; color: #9CA3AF; }
