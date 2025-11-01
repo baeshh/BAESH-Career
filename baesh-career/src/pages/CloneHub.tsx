@@ -1,43 +1,68 @@
 import { useLocation } from 'react-router-dom'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, useMemo } from 'react'
 import ReactMarkdown from 'react-markdown'
 import CommandInput from '../components/CommandInput'
 import ProgressRing from '../components/ProgressRing'
 import InsightCard from '../components/InsightCard'
 import ReportModal from '../components/ReportModal'
 import { streamChatWithReasoning, type Message } from '../services/aiService'
+import { getUserProfile, formatProfileForAI } from '../services/userProfileService'
 
 type Msg = { role: 'user' | 'clone', text: string, isStreaming?: boolean }
 
 export default function CloneHub() {
   const loc = useLocation() as any
   const [mode, setMode] = useState<'분석' | '코칭' | '네트워킹' | '정리'>('코칭')
+  
+  // 사용자 프로필 가져오기
+  const userProfile = useMemo(() => getUserProfile(), [])
+  const profileContext = useMemo(() => formatProfileForAI(userProfile), [userProfile])
+  
   const [msgs, setMsgs] = useState<Msg[]>([
-    { role: 'clone', text: `안녕하세요${loc?.state?.nickname ? `, ${loc.state.nickname}` : ''}. 무엇을 도와드릴까요?` }
+    { role: 'clone', text: `안녕하세요, ${userProfile.basic.name}님! 👋\n\n당신의 프로필을 확인했습니다. **${userProfile.portfolios[0]?.name}** 프로젝트 정말 인상적이네요!\n\n오늘은 무엇을 도와드릴까요?` }
   ])
+  
   const [conversationHistory, setConversationHistory] = useState<Message[]>([
     {
       role: "system",
       content: `당신은 BAESH 플랫폼의 AI 클론 어시스턴트입니다. 사용자의 커리어 성장을 돕는 친근하고 전문적인 조언자입니다.
 
-주요 역할:
+# 주요 역할
 - 커리어 목표 설정 및 진행 상황 추적
 - 라운지(교육 프로그램) 추천
 - 채용 공고(JD) 분석 및 적합도 평가
 - 네트워킹 기회 제안
 - 성장 인사이트 제공
+- 포트폴리오 설계 및 개선 조언
 
-현재 모드: ${mode}
-사용자 정보: ${loc?.state?.nickname || '사용자'}
+# 현재 모드
+${mode}
 
-답변 스타일:
+# 답변 스타일
 - 친근하고 격려하는 톤
 - 구체적이고 실행 가능한 조언
 - 한국어로 답변
-- 이모지를 적절히 사용`
+- 이모지를 적절히 사용
+- 사용자의 프로필 정보를 적극 활용하여 맞춤형 조언 제공
+- 사용자의 강점과 성과를 인정하고 격려
+- 구체적인 프로젝트명, 기술 스택, 경력을 언급하며 조언
+
+# 중요 지침
+- 사용자의 포트폴리오와 경력을 바탕으로 구체적인 조언을 제공하세요
+- 사용자의 최근 네트워킹 게시물을 참고하여 현재 관심사를 파악하세요
+- 사용자의 목표(${userProfile.goals})를 항상 염두에 두고 조언하세요
+- 사용자의 현재 역량 수준을 고려한 현실적인 제안을 하세요
+
+---
+
+${profileContext}`
     }
   ])
-  const [rings, setRings] = useState({ dev: 72, design: 46, soft: 81 })
+  const [rings, setRings] = useState({ 
+    dev: userProfile.skills.development, 
+    design: userProfile.skills.design, 
+    soft: userProfile.skills.communication 
+  })
   const [insights, setInsights] = useState<Array<{ id: number; title: string; desc?: string }>>([
     { id: 1, title: '지난 7일간 라운지 참여율 80%', desc: '참여 유지가 좋습니다.' },
   ])
