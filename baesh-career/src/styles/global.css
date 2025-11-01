@@ -76,7 +76,23 @@ a { color: inherit; text-decoration: none; }
 }
 .button.large { height: 48px; font-weight: 600; }
 .button--ghost { background: transparent; color: var(--text); border-color: var(--text); }
-.badge { font-size: 12px; padding: 6px 10px; border-radius: 999px; background: rgba(2,6,23,0.04); color: var(--muted); border: 1px solid var(--border); }
+.badge { 
+  font-size: 12px; 
+  padding: 6px 12px; 
+  border-radius: 999px; 
+  background: #F1F5F9; 
+  color: #475569; 
+  border: 1px solid #E2E8F0;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.badge:hover {
+  background: #E2E8F0;
+  border-color: #CBD5E1;
+  color: #334155;
+}
 .kbd { font-size: 12px; background: rgba(2,6,23,0.06); border: 1px solid var(--border); padding: 2px 6px; border-radius: 6px; color: var(--muted); }
 .glow { box-shadow: 0 0 0 3px rgba(30,111,255,0.15); }
 
@@ -126,15 +142,85 @@ a { color: inherit; text-decoration: none; }
 .pill { display: inline-flex; align-items: center; height: 32px; padding: 0 12px; border-radius: 999px; background: rgba(30,111,255,0.1); color: var(--brand); border: 1px solid rgba(30,111,255,0.25); }
 
 /* Chat bubbles */
-.bubble { border-radius: 16px; padding: 12px 14px; max-width: 72%; }
-.bubble.user { background: #F1F3F5; color: #0A0A0A; }
-.bubble.clone { background: linear-gradient(180deg, #1E6FFF, #408CFF); color: #fff; }
-.chat-area { display: grid; gap: 8px; padding: 4px; max-height: 60vh; overflow: auto; }
+.bubble { 
+  border-radius: 18px; 
+  padding: 14px 18px; 
+  max-width: 72%; 
+  line-height: 1.6;
+  animation: fade-in 0.3s;
+}
+.bubble.user { 
+  background: #E8F2FF; 
+  color: #1a1a1a; 
+  border: 1px solid #C7E0FF;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+.bubble.clone { 
+  background: white; 
+  color: #1a1a1a; 
+  border: 2px solid #1E6FFF;
+  box-shadow: 0 2px 8px rgba(30, 111, 255, 0.12);
+}
+.chat-area { 
+  display: grid; 
+  gap: 12px; 
+  padding: 8px; 
+  max-height: 60vh; 
+  overflow: auto;
+  scroll-behavior: smooth;
+}
+
+/* 스크롤바 스타일링 */
+.chat-area::-webkit-scrollbar {
+  width: 8px;
+}
+
+.chat-area::-webkit-scrollbar-track {
+  background: #F1F5F9;
+  border-radius: 10px;
+}
+
+.chat-area::-webkit-scrollbar-thumb {
+  background: #CBD5E1;
+  border-radius: 10px;
+}
+
+.chat-area::-webkit-scrollbar-thumb:hover {
+  background: #94A3B8;
+}
 
 /* Action cards inside chat */
-.action-card { background: #FFFFFF; border: 1px solid var(--border); border-radius: 12px; padding: 10px; color: var(--text); }
-.action-card .meta { color: var(--muted); font-size: 12px; }
-.action-buttons { display: flex; gap: 8px; margin-top: 8px; }
+.action-card { 
+  background: #F8FAFC; 
+  border: 2px solid #E2E8F0; 
+  border-radius: 16px; 
+  padding: 18px; 
+  color: #1a1a1a;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transition: all 0.2s ease;
+}
+.action-card:hover {
+  border-color: #1E6FFF;
+  box-shadow: 0 6px 16px rgba(30, 111, 255, 0.15);
+}
+.action-card strong {
+  display: block;
+  margin-bottom: 10px;
+  font-size: 16px;
+  font-weight: 600;
+}
+.action-card .meta { 
+  color: #64748B; 
+  font-size: 14px; 
+  line-height: 1.5;
+  margin-bottom: 10px;
+}
+.action-buttons { 
+  display: flex; 
+  gap: 10px; 
+  margin-top: 14px;
+  flex-wrap: wrap;
+}
 
 /* Right insights panel */
 .insight-grid { display: grid; gap: 10px; }
@@ -306,11 +392,11 @@ a { color: inherit; text-decoration: none; }
 
 /* Markdown Content Styling */
 .markdown-content {
-  line-height: 1.6;
+  line-height: 1.7;
 }
 
 .markdown-content p {
-  margin: 0 0 8px 0;
+  margin: 0 0 12px 0;
 }
 
 .markdown-content p:last-child {
@@ -319,45 +405,48 @@ a { color: inherit; text-decoration: none; }
 
 .markdown-content strong {
   font-weight: 600;
-  color: var(--text);
+  color: #1E6FFF;
 }
 
 .markdown-content em {
   font-style: italic;
-  color: var(--muted);
+  color: #64748B;
 }
 
 .markdown-content ul,
 .markdown-content ol {
-  margin: 8px 0;
-  padding-left: 20px;
+  margin: 10px 0;
+  padding-left: 24px;
 }
 
 .markdown-content li {
-  margin: 4px 0;
+  margin: 6px 0;
+  line-height: 1.6;
 }
 
 .markdown-content code {
-  background: rgba(30, 111, 255, 0.1);
-  padding: 2px 6px;
-  border-radius: 4px;
+  background: #F1F5F9;
+  color: #1E6FFF;
+  padding: 3px 8px;
+  border-radius: 6px;
   font-family: 'Courier New', monospace;
   font-size: 0.9em;
-  color: var(--brand);
+  font-weight: 500;
 }
 
 .markdown-content pre {
-  background: #F5F6F8;
-  padding: 12px;
-  border-radius: 8px;
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  padding: 14px;
+  border-radius: 10px;
   overflow-x: auto;
-  margin: 8px 0;
+  margin: 10px 0;
 }
 
 .markdown-content pre code {
   background: none;
   padding: 0;
-  color: var(--text);
+  color: #334155;
 }
 
 .markdown-content h1,

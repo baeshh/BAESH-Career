@@ -489,10 +489,20 @@ ${profileContext}`,
                     m.isStreaming && !m.text ? "ai-thinking" : ""
                   }`}
                 >
-                  <small style={{ opacity: 0.7 }}>
-                    {m.role === "user" ? "나" : "클론"}
+                  <small
+                    style={{
+                      opacity: 0.8,
+                      fontWeight: 600,
+                      color: m.role === "user" ? "#1E6FFF" : "#64748B",
+                      fontSize: "12px",
+                    }}
+                  >
+                    {m.role === "user" ? "나" : "🤖 AI 클론"}
                   </small>
-                  <div className="markdown-content">
+                  <div
+                    className="markdown-content"
+                    style={{ marginTop: "6px" }}
+                  >
                     {m.text ? (
                       m.role === "clone" ? (
                         <>
@@ -543,7 +553,7 @@ ${profileContext}`,
             </div>
             <span className="helper">
               {isAIResponding
-                ? "🤖 AI 클론이 생각하고 있습니다..."
+                ? " AI 클론이 생각하고 있습니다..."
                 : "AI 클론과 실시간 대화가 가능합니다"}
             </span>
           </div>
