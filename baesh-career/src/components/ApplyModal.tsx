@@ -226,18 +226,18 @@ export default function ApplyModal({
             📂 포트폴리오 선택{" "}
             <span style={{ color: "var(--error)", fontSize: 12 }}>*</span>
           </label>
-          <div className="helper" style={{ fontSize: 12, marginBottom: 8 }}>
-            지원서에 첨부할 포트폴리오를 선택해주세요 (1개 이상)
+          <div className="helper" style={{ fontSize: 12, marginBottom: 12 }}>
+            .
           </div>
-          <div style={{ display: "grid", gap: 8, marginTop: 4 }}>
+          <div style={{ display: "grid", gap: 10, marginTop: 8 }}>
             {portfolioOptions.map((p) => (
               <label
                 key={p}
                 style={{
                   display: "flex",
                   alignItems: "center",
-                  gap: 12,
-                  padding: 14,
+                  gap: 16,
+                  padding: "16px 18px",
                   borderRadius: 12,
                   border: "1px solid",
                   borderColor: portfolio.includes(p)
@@ -255,10 +255,11 @@ export default function ApplyModal({
                   checked={portfolio.includes(p)}
                   onChange={() => togglePortfolio(p)}
                   style={{
-                    width: 18,
-                    height: 18,
+                    width: 20,
+                    height: 20,
                     cursor: "pointer",
                     flexShrink: 0,
+                    marginTop: 2,
                   }}
                 />
                 <span
@@ -268,6 +269,7 @@ export default function ApplyModal({
                     color: portfolio.includes(p)
                       ? "var(--brand)"
                       : "var(--text)",
+                    lineHeight: 1.5,
                   }}
                 >
                   {p}
