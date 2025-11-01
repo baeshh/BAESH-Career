@@ -1,6 +1,9 @@
 import { useLocation } from 'react-router-dom'
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import CommandInput from '../components/CommandInput'
+import ProgressRing from '../components/ProgressRing'
+import InsightCard from '../components/InsightCard'
+import ReportModal from '../components/ReportModal'
 
 type Msg = { role: 'user' | 'clone', text: string }
 
@@ -10,16 +13,52 @@ export default function CloneHub() {
   const [msgs, setMsgs] = useState<Msg[]>([
     { role: 'clone', text: `안녕하세요${loc?.state?.nickname ? `, ${loc.state.nickname}` : ''}. 무엇을 도와드릴까요?` }
   ])
+  const [rings, setRings] = useState({ dev: 72, design: 46, soft: 81 })
+  const [insights, setInsights] = useState<Array<{ id: number; title: string; desc?: string }>>([
+    { id: 1, title: '지난 7일간 라운지 참여율 80%', desc: '참여 유지가 좋습니다.' },
+  ])
+  const [newInsight, setNewInsight] = useState(false)
+  const [reportOpen, setReportOpen] = useState(false)
+  const newBadgeTimeout = useRef<number>()
+
+  useEffect(() => () => { if (newBadgeTimeout.current) clearTimeout(newBadgeTimeout.current) }, [])
+
+  const notifyInsight = (title: string, desc?: string) => {
+    setInsights(prev => [{ id: Date.now(), title, desc }, ...prev])
+    setNewInsight(true)
+    newBadgeTimeout.current = window.setTimeout(() => setNewInsight(false), 1500)
+  }
 
   const send = (text: string) => {
     setMsgs(prev => [...prev, { role: 'user', text }])
+    const lower = text.toLowerCase()
     setTimeout(() => {
-      setMsgs(prev => [...prev, { role: 'clone', text: `[${mode}] "${text}"에 대한 제안을 정리했어요.` }])
-    }, 400)
+      if (lower.startsWith('/goal')) {
+        setMsgs(prev => [...prev, { role: 'clone', text: '목표 프로토콜을 갱신했어요. 진행률 위젯을 업데이트합니다.' }])
+        setRings(v => ({ ...v, dev: Math.min(100, v.dev + 3) }))
+        notifyInsight('목표 업데이트', '진행률이 소폭 상승했습니다.')
+      } else if (lower.startsWith('/report')) {
+        setMsgs(prev => [...prev, { role: 'clone', text: '이번 주 리포트를 준비했어요. 오른쪽에서 확인해 보세요.' }])
+        setReportOpen(true)
+      } else if (lower.startsWith('/connect')) {
+        setMsgs(prev => [...prev, { role: 'clone', text: '관심사가 비슷한 인물을 추천했어요. 아래 카드에서 연결할 수 있어요.' }])
+        setMsgs(prev => [...prev, { role: 'clone', text: '__PERSON__' }])
+        notifyInsight('새로운 네트워킹 기회', '공통 태그 기반 추천')
+      } else if (lower.includes('라운지')) {
+        setMsgs(prev => [...prev, { role: 'clone', text: '__LOUNGE__' }])
+        notifyInsight('라운지 제안', '실습 라운지 참여가 추천됩니다')
+      } else if (lower.includes('jd') || lower.includes('채용')) {
+        setMsgs(prev => [...prev, { role: 'clone', text: '__JD__' }])
+        notifyInsight('채용 적합도 업데이트', '핵심 스킬을 반영했습니다')
+      } else {
+        setMsgs(prev => [...prev, { role: 'clone', text: `[${mode}] "${text}"에 대한 제안을 정리했어요.` }])
+      }
+    }, 500)
   }
 
   return (
     <div className="row row-3">
+      {/* Left: Chat */}
       <section className="panel" style={{ padding: 12, minHeight: 420 }}>
         <header className="header" style={{ border: 'none', padding: 0, marginBottom: 8 }}>
           <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
@@ -43,36 +82,97 @@ export default function CloneHub() {
         <div className="chat-area">
           {msgs.map((m, i) => (
             <div key={i} style={{ display: 'grid', justifyItems: m.role === 'user' ? 'end' : 'start' }} className="fade-in">
-              <div className={`bubble ${m.role === 'user' ? 'user' : 'clone'}`}>
-                <small style={{ opacity: .7 }}>{m.role === 'user' ? '나' : '클론'}</small>
-                <div>{m.text}</div>
-              </div>
+              {m.text === '__JD__' ? (
+                <div className="action-card" style={{ justifySelf: 'start' }}>
+                  <strong>JD 분석 결과</strong>
+                  <div className="meta">적합도 83% · 부족 스킬 2개</div>
+                  <div className="action-buttons">
+                    <button className="button">보완 라운지 이동</button>
+                    <button className="badge">유사 JD 보기</button>
+                  </div>
+                  <div className="meta" style={{ marginTop: 6 }}>📈 이 활동이 당신의 ‘데이터 엔지니어링 역량’을 +6% 향상시킵니다.</div>
+                </div>
+              ) : m.text === '__LOUNGE__' ? (
+                <div className="action-card" style={{ justifySelf: 'start' }}>
+                  <strong>데이터 파이프라인 라운지</strong>
+                  <div className="meta">기간: 2주 · 실습형</div>
+                  <div className="action-buttons">
+                    <button className="button">신청하기</button>
+                    <button className="badge">상세 보기</button>
+                  </div>
+                  <div className="meta" style={{ marginTop: 6 }}>📈 이 활동이 당신의 ‘데이터 엔지니어링 역량’을 +6% 향상시킵니다.</div>
+                </div>
+              ) : m.text === '__PERSON__' ? (
+                <div className="action-card" style={{ justifySelf: 'start' }}>
+                  <strong>연결 추천: 김데이터</strong>
+                  <div className="meta">공통점: 같은 학교 · 동일 태그(SQL)</div>
+                  <div className="action-buttons">
+                    <button className="button">연결하기</button>
+                    <button className="badge">프로필</button>
+                  </div>
+                  <div className="meta" style={{ marginTop: 6 }}>📈 이 활동이 당신의 ‘데이터 엔지니어링 역량’을 +6% 향상시킵니다.</div>
+                </div>
+              ) : (
+                <div className={`bubble ${m.role === 'user' ? 'user' : 'clone'}`}>
+                  <small style={{ opacity: .7 }}>{m.role === 'user' ? '나' : '클론'}</small>
+                  <div>{m.text}</div>
+                </div>
+              )}
             </div>
           ))}
         </div>
 
         <div style={{ height: 8 }} />
-        <CommandInput onSubmit={send} placeholder="예) /목표 다음 3단계 추천" />
+        {/* Bottom command bar */}
+        <div style={{ display: 'grid', gap: 8 }}>
+          <CommandInput onSubmit={send} placeholder="클론과 자유롭게 대화해보세요." />
+          <div style={{ display: 'flex', gap: 8, justifyContent: 'space-between' }}>
+            <div style={{ display: 'flex', gap: 8 }}>
+              <button className="badge" onClick={() => send('/goal')}>🎯 목표보기</button>
+              <button className="badge" onClick={() => send('/report')}>📊 성장 리포트</button>
+              <button className="badge" onClick={() => send('/connect')}>⚙️ 모드 전환</button>
+            </div>
+            <span className="helper">응답은 0.5s 지연 후 타이핑처럼 표시됩니다.</span>
+          </div>
+        </div>
       </section>
 
-      <aside className="panel" style={{ padding: 12 }}>
-        <h3>추천 / 알림 / ActionQueue</h3>
-        <div className="panel" style={{ padding: 12, marginTop: 8 }}>
-          <strong>AI 인사이트</strong>
-          <p style={{ color: 'var(--muted)' }}>지난 7일간 라운지 참여율 80%</p>
+      {/* Right: Insights */}
+      <aside className={`panel ${newInsight ? 'highlight-twinkle' : ''}`} style={{ padding: 12 }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <h3 style={{ margin: 0 }}>성장 인사이트</h3>
+          {newInsight && <span className="badge glow">New Insight 🌟</span>}
         </div>
         <div className="panel" style={{ padding: 12, marginTop: 8 }}>
-          <strong>목표 기반 제안</strong>
-          <ul>
-            <li>다음 3단계 목표 플랜</li>
-            <li>이번 주 네트워킹 비율 +10%</li>
-          </ul>
+          <strong>핵심 기술 성장도</strong>
+          <div className="rings" style={{ marginTop: 8 }}>
+            <ProgressRing percent={rings.dev} label="개발 역량" hint="SQL +5%, Python +2%" />
+            <ProgressRing percent={rings.design} label="디자인 역량" color="#6B7280" hint="UI +2%" />
+            <ProgressRing percent={rings.soft} label="커뮤니케이션" color="#10B981" hint="네트워킹 +3%" />
+          </div>
         </div>
-        <div className="panel" style={{ padding: 12, marginTop: 8 }}>
-          <strong>주간 리포트</strong>
-          <p style={{ color: 'var(--muted)' }}>이번 주 성장 리포트 자동 생성</p>
+        <div className="insight-grid" style={{ marginTop: 8 }}>
+          {insights.map((it, idx) => (
+            <InsightCard key={it.id} title={it.title} description={it.desc} badgeNew={idx === 0 && newInsight} />
+          ))}
+          <div className="panel" style={{ padding: 12 }}>
+            <strong>🎯 목표 진행률</strong>
+            <div style={{ marginTop: 6 }} className="helper">6개월 내 데이터 엔지니어 전직 (가상) · 45% 진행</div>
+            <div style={{ marginTop: 8 }}>
+              <div style={{ background: '#E5E7EB', height: 8, borderRadius: 999, overflow: 'hidden' }}>
+                <div style={{ width: '45%', height: '100%', background: 'linear-gradient(90deg, #1E6FFF, #408CFF)', transition: 'width .5s' }} />
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 6 }}>
+                <span className="helper">완료 예측: 2025-12</span>
+                <button className="badge">최근 달성 보기</button>
+              </div>
+            </div>
+          </div>
+          <InsightCard title="주간 리포트" description="이번 주 성장 리포트 자동 생성" actionText="리포트 보기" onAction={() => setReportOpen(true)} />
         </div>
       </aside>
+
+      <ReportModal open={reportOpen} onClose={() => setReportOpen(false)} />
     </div>
   )
 }
