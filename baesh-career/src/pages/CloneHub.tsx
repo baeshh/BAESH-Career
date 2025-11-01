@@ -395,7 +395,7 @@ ${profileContext}`,
           style={{ border: "none", padding: 0, marginBottom: 8 }}
         >
           <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
-            <strong>클론 허브</strong>
+            <strong>클론</strong>
             <span className="badge">AI 동반자</span>
             <button
               className="badge session-list-btn"
