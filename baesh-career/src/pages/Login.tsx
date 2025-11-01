@@ -133,7 +133,7 @@ export default function Login() {
                 disabled={!canSubmit || submitting}
                 aria-disabled={!canSubmit || submitting}
               >
-                {submitting ? "AI 분석 중…" : "로그인"}
+                {submitting ? "로그인 중…" : "로그인"}
               </button>
             </div>
             <div
