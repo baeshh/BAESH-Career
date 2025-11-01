@@ -2,6 +2,7 @@ import { useState } from 'react'
 import PostCard from '../components/PostCard'
 import PostComposer from '../components/PostComposer'
 import UserProfileModal from '../components/UserProfileModal'
+import DMModal from '../components/DMModal'
 
 type Post = {
   id: number
@@ -179,32 +180,7 @@ export default function Networking() {
       <UserProfileModal open={profileOpen} onClose={() => setProfileOpen(false)} user={selectedUser} onDM={handleDMFromProfile} />
 
       {/* DM Modal */}
-      {dmOpen && (
-        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.55)', display: 'grid', placeItems: 'center', zIndex: 50 }} onClick={() => setDmOpen(false)}>
-          <div className="panel" style={{ width: 'min(600px, 90vw)', padding: 24, maxHeight: '80vh', overflow: 'auto' }} onClick={e => e.stopPropagation()}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
-              <h3 style={{ margin: 0 }}>메시지</h3>
-              <button onClick={() => setDmOpen(false)} style={{ background: 'none', border: 'none', fontSize: 24, cursor: 'pointer' }}>&times;</button>
-            </div>
-            <div className="panel" style={{ padding: 12, background: '#F5F6F8', marginBottom: 12 }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                <div style={{ width: 36, height: 36, borderRadius: 999, background: 'linear-gradient(135deg, #1E6FFF, #408CFF)' }} />
-                <div>
-                  <strong style={{ fontSize: 14 }}>배승환</strong>
-                  <span style={{ fontSize: 12, color: 'var(--success)', marginLeft: 6 }}>● 온라인</span>
-                </div>
-              </div>
-            </div>
-            <div style={{ minHeight: 200, padding: 12, background: '#FAFAFA', borderRadius: 8, marginBottom: 12 }}>
-              <div className="helper" style={{ textAlign: 'center', padding: 40 }}>메시지 대화 내역이 여기 표시됩니다</div>
-            </div>
-            <div style={{ display: 'flex', gap: 8 }}>
-              <input className="input" placeholder="메시지 입력..." style={{ flex: 1, height: 44 }} />
-              <button className="button" style={{ height: 44, padding: '0 20px' }}>📩 전송</button>
-            </div>
-          </div>
-        </div>
-      )}
+      <DMModal open={dmOpen} onClose={() => setDmOpen(false)} recipient={selectedUser?.name || '사용자'} />
     </div>
   )
 }
