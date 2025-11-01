@@ -67,8 +67,8 @@ export const getUserProfile = (): UserProfile => {
       { name: '정보처리기사', issuer: '한국산업인력공단', verified: true },
       { name: 'SQLD', issuer: '한국데이터산업진흥원', verified: true },
       { name: '빅데이터분석전문가', issuer: '한국데이터산업진흥원', verified: true },
-      { name: '백준 티어 - 골드', issuer: 'Baekjoon Online Judge', verified: true },
-      { name: '토익 800점', issuer: 'ETS', verified: true },
+      { name: '백준 티어 - 플레티넘', issuer: 'Baekjoon Online Judge', verified: true },
+      { name: '토익 850점', issuer: 'ETS', verified: true },
       // 포항테크노파크 수료증
       { name: '인공지능 기본과정 수료', issuer: '포항테크노파크', verified: true },
       { name: '인공지능 중급과정 수료', issuer: '포항테크노파크', verified: true },

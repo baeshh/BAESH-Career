@@ -26,11 +26,26 @@ export default function Profile() {
   const [openPort, setOpenPort] = useState(false)
   const [openOrg, setOpenOrg] = useState(false)
   const [openVerify, setOpenVerify] = useState(false)
+  const [profilePhoto, setProfilePhoto] = useState<string | null>(null)
+  const [photoChangeOpen, setPhotoChangeOpen] = useState(false)
 
   const addInsight = (title: string) => {
     setNewInsight(true)
     setTimeout(() => setNewInsight(false), 1500)
     console.log('insight:', title)
+  }
+
+  const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (file) {
+      const reader = new FileReader()
+      reader.onloadend = () => {
+        setProfilePhoto(reader.result as string)
+        setPhotoChangeOpen(false)
+        addInsight('프로필 사진이 업데이트되었습니다')
+      }
+      reader.readAsDataURL(file)
+    }
   }
 
   return (
@@ -40,7 +55,56 @@ export default function Profile() {
         {/* Header */}
         <div className="panel" style={{ padding: 16, background: '#F7F9FB' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-            <div style={{ width: 64, height: 64, borderRadius: 999, background: 'linear-gradient(135deg, #1E6FFF, #408CFF)' }} />
+            <div 
+              style={{ 
+                position: 'relative',
+                width: 80, 
+                height: 80, 
+                borderRadius: 999, 
+                overflow: 'hidden',
+                border: '3px solid #1E6FFF',
+                cursor: 'pointer',
+                boxShadow: '0 4px 12px rgba(30, 111, 255, 0.2)',
+                background: profilePhoto ? 'transparent' : 'linear-gradient(135deg, #1E6FFF, #408CFF)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}
+              onClick={() => setPhotoChangeOpen(true)}
+            >
+              {profilePhoto ? (
+                <img 
+                  src={profilePhoto} 
+                  alt="프로필 사진" 
+                  style={{ 
+                    width: '100%', 
+                    height: '100%', 
+                    objectFit: 'cover' 
+                  }}
+                />
+              ) : (
+                <span style={{ fontSize: 32, color: 'white' }}>👤</span>
+              )}
+              <div 
+                style={{
+                  position: 'absolute',
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  background: 'rgba(0,0,0,0.6)',
+                  color: 'white',
+                  fontSize: 10,
+                  textAlign: 'center',
+                  padding: '2px 0',
+                  opacity: 0,
+                  transition: 'opacity 0.2s'
+                }}
+                onMouseEnter={(e) => e.currentTarget.style.opacity = '1'}
+                onMouseLeave={(e) => e.currentTarget.style.opacity = '0'}
+              >
+                📷 {profilePhoto ? '변경' : '추가'}
+              </div>
+            </div>
             <div>
               <h2 style={{ margin: 0 }}>{userProfile.basic.name} <span style={{ fontSize: 16 }}>🇰🇷</span></h2>
               <div style={{ color: 'var(--muted)' }}>"AI와 데이터를 통해 세상을 바꾸는 창업형 개발자"</div>
@@ -259,6 +323,69 @@ export default function Profile() {
       <PortfolioFormModal open={openPort} onClose={()=>setOpenPort(false)} onSave={(d)=>addInsight('새 프로젝트가 추가되었습니다')} />
       <OrganizationFormModal open={openOrg} onClose={()=>setOpenOrg(false)} onSave={(d)=>addInsight('새 단체/활동이 추가되었습니다')} />
       <VerificationModal open={openVerify} onClose={()=>setOpenVerify(false)} onSubmit={(d)=>addInsight('인증 요청이 접수되었습니다')} />
+
+      {/* Photo Change Modal */}
+      <Modal open={photoChangeOpen} onClose={() => setPhotoChangeOpen(false)} title="프로필 사진 변경">
+        <div style={{ display: 'grid', gap: 16 }}>
+          <div style={{ textAlign: 'center' }}>
+            <div 
+              style={{ 
+                width: 150, 
+                height: 150, 
+                borderRadius: 999, 
+                overflow: 'hidden',
+                border: '3px solid #1E6FFF',
+                margin: '0 auto 16px',
+                boxShadow: '0 4px 12px rgba(30, 111, 255, 0.2)',
+                background: profilePhoto ? 'transparent' : 'linear-gradient(135deg, #1E6FFF, #408CFF)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}
+            >
+              {profilePhoto ? (
+                <img 
+                  src={profilePhoto} 
+                  alt="현재 프로필 사진" 
+                  style={{ 
+                    width: '100%', 
+                    height: '100%', 
+                    objectFit: 'cover' 
+                  }}
+                />
+              ) : (
+                <span style={{ fontSize: 64, color: 'white' }}>👤</span>
+              )}
+            </div>
+            <p className="helper">{profilePhoto ? '현재 프로필 사진' : '프로필 사진이 없습니다'}</p>
+          </div>
+
+          <div className="panel" style={{ padding: 16, background: '#F7F9FB' }}>
+            <strong>📷 새 사진 업로드</strong>
+            <p className="helper" style={{ marginTop: 8 }}>
+              JPG, PNG, GIF 형식 지원 (최대 5MB)
+            </p>
+            <input 
+              type="file" 
+              accept="image/*"
+              onChange={handlePhotoChange}
+              style={{
+                marginTop: 12,
+                width: '100%',
+                padding: '12px',
+                border: '2px dashed #1E6FFF',
+                borderRadius: '8px',
+                cursor: 'pointer',
+                background: 'white'
+              }}
+            />
+          </div>
+
+          <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 8 }}>
+            <button className="badge" onClick={() => setPhotoChangeOpen(false)}>취소</button>
+          </div>
+        </div>
+      </Modal>
     </div>
   )
 }
