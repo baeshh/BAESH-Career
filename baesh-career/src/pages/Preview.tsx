@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import rehypeRaw from "rehype-raw";
 import CommandInput from "../components/CommandInput";
 import { streamChatWithReasoning, type Message } from "../services/aiService";
 
@@ -238,7 +239,10 @@ export default function Preview() {
                   {m.text ? (
                     m.role === "clone" ? (
                       <>
-                        <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                        <ReactMarkdown
+                          remarkPlugins={[remarkGfm]}
+                          rehypePlugins={[rehypeRaw]}
+                        >
                           {m.text}
                         </ReactMarkdown>
                         {m.isStreaming && (

@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, useMemo } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import rehypeRaw from "rehype-raw";
 import CommandInput from "../components/CommandInput";
 import ProgressRing from "../components/ProgressRing";
 import InsightCard from "../components/InsightCard";
@@ -507,7 +508,10 @@ ${profileContext}`,
                     {m.text ? (
                       m.role === "clone" ? (
                         <>
-                          <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                          <ReactMarkdown 
+                            remarkPlugins={[remarkGfm]}
+                            rehypePlugins={[rehypeRaw]}
+                          >
                             {m.text}
                           </ReactMarkdown>
                           {m.isStreaming && (
