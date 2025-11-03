@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState, useMemo } from "react";
 import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import CommandInput from "../components/CommandInput";
 import ProgressRing from "../components/ProgressRing";
 import InsightCard from "../components/InsightCard";
@@ -506,7 +507,9 @@ ${profileContext}`,
                     {m.text ? (
                       m.role === "clone" ? (
                         <>
-                          <ReactMarkdown>{m.text}</ReactMarkdown>
+                          <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                            {m.text}
+                          </ReactMarkdown>
                           {m.isStreaming && (
                             <span className="typing-cursor">|</span>
                           )}

@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import CommandInput from "../components/CommandInput";
 import { streamChatWithReasoning, type Message } from "../services/aiService";
 
@@ -237,7 +238,9 @@ export default function Preview() {
                   {m.text ? (
                     m.role === "clone" ? (
                       <>
-                        <ReactMarkdown>{m.text}</ReactMarkdown>
+                        <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                          {m.text}
+                        </ReactMarkdown>
                         {m.isStreaming && (
                           <span className="typing-cursor">|</span>
                         )}
