@@ -9,9 +9,8 @@ export default function AppLayout() {
   return (
     <div style={{ minHeight: '100vh', display: 'grid', gridTemplateRows: 'auto 1fr' }}>
       <header className="panel header">
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+        <div style={{ display: 'flex', alignItems: 'center' }}>
           <Brand />
-          <span className="badge">BAESH Career</span>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           <Nav />

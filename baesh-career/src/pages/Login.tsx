@@ -3,7 +3,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../auth/AuthContext";
 import TypingText from "../components/TypingText";
 import Modal from "../components/Modal";
-import AIHero from "../components/AIHero";
+import logoSrc from "../assets/BAESH logo.png";
 
 function validateEmail(v: string) {
   return /.+@.+\..+/.test(v);
@@ -63,20 +63,36 @@ export default function Login() {
   };
 
   return (
-    <div
-      className="container"
-      style={{ minHeight: "100vh", display: "grid", alignContent: "center" }}
-    >
-      <div className="row row-2" style={{ alignItems: "stretch" }}>
-        <AIHero />
-        <div className="panel soft-inner" style={{ padding: 24 }}>
+    <div className="login-root">
+      <div className="login-shell">
+        <section className="login-hero">
+          <div style={{ position: "relative", zIndex: 1, display: "grid", gap: 28 }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+              <img src={logoSrc} alt="BAESH 로고" style={{ width: 84, height: "auto" }} />
+              <h1 className="login-hero__title">
+                당신의 커리어 AI 클론과 <br />함께 성장하세요.
+              </h1>
+              <p>
+              Beyond AI, Toward Humanity.
+              </p>
+            </div>
+            <div className="login-hero__chips">
+              <span className="login-hero__chip">⚡ 실시간 성장 인사이트</span>
+              <span className="login-hero__chip">🤝 1:1 커리어 코칭</span>
+              <span className="login-hero__chip">🚀 글로벌 네트워크 추천</span>
+            </div>
+          </div>
+        </section>
+
+        <div className="panel soft-inner login-form-panel">
           <div>
-            <h2 style={{ marginTop: 0 }}>로그인</h2>
-            <p style={{ color: "var(--muted)" }}>
-              <TypingText text="당신의 커리어를 기억하는 첫 번째 AI, BAESH를 만나보세요." />
+            <strong style={{ fontSize: 20, letterSpacing: -0.01 }}>로그인</strong>
+            <p style={{ margin: "6px 0 0 0", color: "var(--muted)", fontSize: 14 }}>
+              로그인하고 당신의 커리어 클론과 대화를 시작해 보세요.
             </p>
           </div>
-          <form onSubmit={handleSubmit} style={{ marginTop: 12 }}>
+
+          <form onSubmit={handleSubmit} style={{ display: "grid", gap: 16 }}>
             <div className="field">
               <input
                 id="email"
@@ -93,7 +109,7 @@ export default function Login() {
                 </small>
               )}
             </div>
-            <div style={{ height: 8 }} />
+
             <div className="field">
               <input
                 id="password"
@@ -107,12 +123,12 @@ export default function Login() {
               />
               <label htmlFor="password">비밀번호(8자 이상)</label>
             </div>
+
             {error && (
               <div
                 className="panel"
                 style={{
                   padding: 12,
-                  marginTop: 8,
                   background: "rgba(255, 59, 48, 0.08)",
                   borderColor: "rgba(255, 59, 48, 0.25)",
                 }}
@@ -120,14 +136,18 @@ export default function Login() {
                 <strong>클론:</strong> {error}
               </div>
             )}
+
             <div
               style={{
                 display: "flex",
-                justifyContent: "flex-end",
+                justifyContent: "space-between",
                 alignItems: "center",
-                marginTop: 12,
+                gap: 12,
               }}
             >
+              <div style={{ fontSize: 13, color: "var(--muted)" }}>
+                안전한 접속을 위해 HTTPS 암호화가 적용됩니다.
+              </div>
               <button
                 className="button"
                 disabled={!canSubmit || submitting}
@@ -136,14 +156,8 @@ export default function Login() {
                 {submitting ? "로그인 중…" : "로그인"}
               </button>
             </div>
-            <div
-              style={{
-                display: "flex",
-                gap: 8,
-                marginTop: 8,
-                justifyContent: "flex-end",
-              }}
-            >
+
+            <div style={{ display: "flex", gap: 8, justifyContent: "flex-end" }}>
               <Link
                 to="/signup"
                 className="button--ghost"
@@ -170,10 +184,10 @@ export default function Login() {
               </Link>
             </div>
           </form>
-          <div style={{ height: 12 }} />
+
           <div>
             <strong>소셜 로그인</strong>
-            <div className="social-list" style={{ marginTop: 8 }}>
+            <div className="social-list" style={{ marginTop: 12 }}>
               <button
                 className="social-row"
                 onClick={() => startOAuth("Google")}
@@ -254,10 +268,10 @@ export default function Login() {
             <button
               className="button--ghost"
               style={{
-                height: 36,
-                borderRadius: 999,
-                padding: "0 10px",
-                borderColor: "rgba(10,10,10,0.3)",
+                height: 40,
+                borderRadius: 16,
+                padding: "0 16px",
+                borderColor: "rgba(10,10,10,0.25)",
               }}
               onClick={() => nav("/preview")}
             >
