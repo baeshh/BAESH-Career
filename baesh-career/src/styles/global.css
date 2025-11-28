@@ -563,9 +563,9 @@ a { color: inherit; text-decoration: none; }
   min-height: 100vh;
   padding: 48px 20px;
   background:
-    radial-gradient(1200px 600px at 10% 15%, rgba(30, 111, 255, 0.12), transparent),
-    radial-gradient(1000px 520px at 90% 10%, rgba(64, 140, 255, 0.12), transparent),
-    linear-gradient(180deg, #f5f8ff 0%, #eef2ff 100%);
+    radial-gradient(1200px 600px at 10% 15%, rgba(30, 111, 255, 0.08), transparent),
+    radial-gradient(1000px 520px at 90% 10%, rgba(64, 140, 255, 0.08), transparent),
+    linear-gradient(180deg, #f9fafb 0%, #f5f8ff 100%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -586,8 +586,8 @@ a { color: inherit; text-decoration: none; }
 
 @media (min-width: 960px) {
   .login-shell {
-    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
-    align-items: stretch;
+    /* 그리드 레이아웃 제거 - 단일 컬럼으로 표시 */
+    max-width: 500px;
   }
 }
 
@@ -596,7 +596,7 @@ a { color: inherit; text-decoration: none; }
   overflow: hidden;
   border-radius: 32px;
   padding: 48px;
-  background: linear-gradient(135deg, #1e6fff 0%, #7b5bff 45%, #00b5d9 100%);
+  background: #000000;
   color: #f8fbff;
   display: flex;
   flex-direction: column;

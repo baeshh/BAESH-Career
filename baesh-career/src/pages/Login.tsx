@@ -1,9 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../auth/AuthContext";
-import TypingText from "../components/TypingText";
 import Modal from "../components/Modal";
-import logoSrc from "../assets/BAESH logo.png";
 
 function validateEmail(v: string) {
   return /.+@.+\..+/.test(v);
@@ -64,26 +62,7 @@ export default function Login() {
 
   return (
     <div className="login-root">
-      <div className="login-shell">
-        <section className="login-hero">
-          <div style={{ position: "relative", zIndex: 1, display: "grid", gap: 28 }}>
-            <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
-              <img src={logoSrc} alt="BAESH 로고" style={{ width: 84, height: "auto" }} />
-              <h1 className="login-hero__title">
-                당신의 커리어 AI 클론과 <br />함께 성장하세요.
-              </h1>
-              <p>
-              Beyond AI, Toward Humanity.
-              </p>
-            </div>
-            <div className="login-hero__chips">
-              <span className="login-hero__chip">⚡ 실시간 성장 인사이트</span>
-              <span className="login-hero__chip">🤝 1:1 커리어 코칭</span>
-              <span className="login-hero__chip">🚀 글로벌 네트워크 추천</span>
-            </div>
-          </div>
-        </section>
-
+      <div className="login-shell" style={{ maxWidth: 500, margin: '0 auto' }}>
         <div className="panel soft-inner login-form-panel">
           <div>
             <strong style={{ fontSize: 20, letterSpacing: -0.01 }}>로그인</strong>
